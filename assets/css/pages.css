@@ -155,7 +155,7 @@
 
   .trust__item + .trust__item {
     padding-left: var(--space-3);
-    border-left: 1px solid rgba(201, 169, 124, 0.35);
+    border-left: 1px solid var(--line-on-dark);
   }
 }
 
@@ -541,7 +541,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
   overflow: hidden;
-  background: linear-gradient(160deg, var(--sage) 0%, #D5DDD2 100%);
+  background: var(--sage);
 }
 
 .office__map-label {
@@ -750,17 +750,6 @@
   justify-content: space-between;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
-}
-
-.insta__handle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  min-height: 44px;
-  font-weight: 600;
-  color: var(--champagne-ink);
-  text-decoration: none;
-  border-bottom: 1px solid var(--line-strong);
 }
 
 .insta__grid {
@@ -1124,15 +1113,6 @@ ol.milestones {
   gap: var(--space-3);
 }
 
-.philosophy__title {
-  font-family: var(--font-sans);
-  font-size: var(--fs-small);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--champagne-ink);
-}
-
 .philosophy__quote {
   padding-left: var(--space-3);
   border-left: 2px solid var(--champagne);
@@ -1339,11 +1319,11 @@ ol.milestones {
 /* Seções abaixo da dobra: o navegador pula layout e pintura até elas chegarem perto da tela.
    As alturas estimadas vêm da medição real, para as âncoras do menu caírem no lugar certo.
    .offices e .aero ficam de fora: a galeria de vidro invade a seção seguinte e seria cortada. */
-.services { --cis: 1350px; }
-.visit { --cis: 1000px; }
-.faq { --cis: 850px; }
-.insta { --cis: 560px; }
-.contact { --cis: 1150px; }
+.services { --cv-estimate: 1350px; }
+.visit { --cv-estimate: 1000px; }
+.faq { --cv-estimate: 850px; }
+.insta { --cv-estimate: 560px; }
+.contact { --cv-estimate: 1150px; }
 
 .services,
 .visit,
@@ -1351,13 +1331,13 @@ ol.milestones {
 .insta,
 .contact {
   content-visibility: auto;
-  contain-intrinsic-size: auto var(--cis);
+  contain-intrinsic-size: auto var(--cv-estimate);
 }
 
 @media (max-width: 767px) {
-  .services { --cis: 2000px; }
-  .visit { --cis: 1270px; }
-  .faq { --cis: 1050px; }
-  .insta { --cis: 620px; }
-  .contact { --cis: 1690px; }
+  .services { --cv-estimate: 2000px; }
+  .visit { --cv-estimate: 1270px; }
+  .faq { --cv-estimate: 1050px; }
+  .insta { --cv-estimate: 620px; }
+  .contact { --cv-estimate: 1690px; }
 }

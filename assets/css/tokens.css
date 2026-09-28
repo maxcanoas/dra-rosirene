@@ -16,6 +16,9 @@
   --line: rgba(125, 96, 56, 0.28);
   --line-strong: #C9A97C;
   --field-border: #8A8074;
+  --field-bg: #FFFDFA;
+  --error: #9A3B2E;
+  --line-on-dark: rgba(201, 169, 124, 0.35);
 
   /* Vidro */
   --glass-bg: rgba(247, 243, 238, 0.65);

@@ -290,7 +290,7 @@ strong {
 .media {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, var(--sage) 0%, var(--sage-deep) 100%);
+  background: var(--sage);
 }
 
 .media > picture {

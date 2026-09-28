@@ -48,7 +48,7 @@
   toTop?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: scrollBehavior() });
     const brand = document.querySelector('.brand');
-    if (brand) brand.focus({ preventScroll: true });
+    if (brand) focusWithoutScroll(brand);
   });
 
   /* Menu mobile */
@@ -59,18 +59,21 @@
   if (menu && openButton) {
     const panel = menu.querySelector('.mobile-menu__panel');
     let lastFocus = null;
+    let pendingHide = null;
 
     const focusables = () => [...panel.querySelectorAll('a[href], button:not([disabled])')];
 
     function openMenu() {
+      // Reabrir antes do fim da animação de fechamento não pode deixar o painel escondido.
+      if (pendingHide) panel.removeEventListener('transitionend', pendingHide);
+      pendingHide = null;
       lastFocus = document.activeElement;
       menu.hidden = false;
       document.body.classList.add('is-locked');
       openButton.setAttribute('aria-expanded', 'true');
-      requestAnimationFrame(() => {
-        menu.classList.add('is-open');
-        focusables()[0]?.focus();
-      });
+      void panel.offsetWidth; // aplica o estado inicial antes da transição de entrada
+      menu.classList.add('is-open');
+      focusables()[0]?.focus();
     }
 
     function closeMenu({ restoreFocus = true } = {}) {
@@ -78,9 +81,16 @@
       menu.classList.remove('is-open');
       document.body.classList.remove('is-locked');
       openButton.setAttribute('aria-expanded', 'false');
-      const hide = () => { menu.hidden = true; };
-      if (reducedMotion.matches) hide();
-      else panel.addEventListener('transitionend', hide, { once: true });
+      const hide = () => {
+        menu.hidden = true;
+        pendingHide = null;
+      };
+      if (reducedMotion.matches) {
+        hide();
+      } else {
+        pendingHide = hide;
+        panel.addEventListener('transitionend', hide, { once: true });
+      }
       if (restoreFocus) lastFocus?.focus();
     }
 
@@ -117,22 +127,28 @@
   /* Âncoras na mesma página: rolagem suave e foco na seção de destino */
 
   document.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const link = event.target.closest('a[href^="#"]');
     if (!link) return;
     const id = link.getAttribute('href').slice(1);
     const target = id && document.getElementById(id);
     if (!target) return;
     event.preventDefault();
-    target.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
-    settleOn(target);
+    scrollToSection(target, scrollBehavior());
     history.pushState(null, '', '#' + id);
     focusWithoutScroll(target);
   });
 
   // Seções com content-visibility só revelam a altura real quando chegam perto da tela.
   // No primeiro salto longo o destino pode ficar deslocado; ao fim da rolagem, reajusta.
+  // "instant" e não "auto": com scroll-behavior: smooth no CSS, "auto" viraria outra rolagem animada.
+  function scrollToSection(target, behavior) {
+    target.scrollIntoView({ behavior, block: 'start' });
+    settleOn(target);
+  }
+
   function settleOn(target) {
-    const realign = () => target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    const realign = () => target.scrollIntoView({ behavior: 'instant', block: 'start' });
     if (!('onscrollend' in window)) {
       setTimeout(realign, 900);
       return;
@@ -146,10 +162,7 @@
   if (location.hash.length > 1) {
     const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
     if (target) {
-      window.addEventListener('load', () => {
-        target.scrollIntoView({ behavior: 'auto', block: 'start' });
-        settleOn(target);
-      }, { once: true });
+      window.addEventListener('load', () => scrollToSection(target, 'instant'), { once: true });
     }
   }
 
@@ -204,9 +217,12 @@
 
     function validateField(input) {
       const ok = rules[input.name](input.value);
-      const error = document.getElementById(input.getAttribute('aria-describedby'));
+      const error = document.getElementById(input.name + '-erro');
       input.setAttribute('aria-invalid', String(!ok));
-      if (error) error.hidden = ok;
+      // Leitores de tela leem a descrição mesmo escondida: o vínculo só existe enquanto há erro.
+      if (ok) input.removeAttribute('aria-describedby');
+      else input.setAttribute('aria-describedby', error.id);
+      error.hidden = ok;
       return ok;
     }
 

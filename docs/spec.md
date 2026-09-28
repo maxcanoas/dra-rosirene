@@ -9,12 +9,12 @@ Raiz: `D:\Freelas\dra-rosirene`. Objetivo único: o paciente agendar pelo WhatsA
 |---|---|
 | JS | Scripts clássicos com `defer`, cada arquivo em escopo próprio. Sem JS, o conteúdo aparece inteiro. |
 | Git | `git init` local na raiz, checkpoint depois da aprovação, um commit por fase. Sem remote. |
-| Fontes | **Newsreader** (títulos) + **Source Sans 3** (corpo), via Google Fonts com preconnect e `display=swap`. |
+| Fontes | **Newsreader** (títulos) + **Source Sans 3** (corpo), via Google Fonts com preconnect e `display=swap`, carregadas sem bloquear a renderização. A Newsreader vem em dois cortes estáticos: peso 300 em tamanho óptico 72 (h1, h2, citações) e peso 400 em tamanho óptico 16 (h3, h4, marca, cards). Fallbacks locais com size-adjust medido, para a troca de fonte não mover o layout. |
 | Voz | 1ª pessoa (a Dra.) no hero, nas citações, nos passos da consulta e em "Como eu vejo o cuidado". "O consultório" em agendamento, convênios e formulário. 3ª pessoa em títulos e menu. |
 | Menu | Na home, âncoras. Nas internas, "A Dra. Rosirene" → sobre.html, "Atendimentos" → atendimentos.html, o resto → `index.html#…`. `aria-current="page"`. |
 | Domínio | `https://[PREENCHER-DOMINIO]` em canonical, og, sitemap e JSON-LD. |
 | CFM 2.336 | RQE sempre acompanhado da especialidade. Sem preço, promessa, superlativo, antes e depois ou depoimento. |
-| WhatsApp | Uma mensagem pré-preenchida por ponto de saída, na voz do paciente. Link `https://wa.me/55DDDNUMERO` marcado [PREENCHER]. |
+| WhatsApp | Mensagem pré-preenchida na voz do paciente. Header, menu e botão flutuante (componentes compartilhados) usam a genérica. Hero, contato, Aeroespacial e os CTAs de Sobre e Atendimentos têm texto próprio. Link `https://wa.me/55DDDNUMERO` marcado [PREENCHER]. |
 | Revisão | humanizar-ui e humanizar aplicados direto. O briefing vence os conflitos, que ficam listados no relatório final. |
 
 ## 2. Direção visual
@@ -79,7 +79,8 @@ Header e rodapé idênticos nas quatro, conferidos com diff. Só muda o `aria-cu
 
 1. **Header** [vidro]: nome em Newsreader + "Otorrinolaringologia · CRM-RS 16423" · menu (Início, A Dra. Rosirene,
    Atendimentos, Consultórios, Dúvidas, Contato) · "Agendar consulta".
-   - Altura de 88px, que cai para 68px depois de 24px de rolagem.
+   - Altura de 88px, que cai para 68px depois de 24px de rolagem (no celular, 72px e 64px).
+   - No topo o header fica sobre o off-white liso, então aparece sem blur. O vidro entra ao rolar, com opacidade 0,86 para o texto secundário manter AA.
    - Menu horizontal a partir de 1200px. Abaixo disso vira painel lateral de vidro, e o botão do header
      aparece só a partir de 640px. Em telas menores ele fica dentro do painel.
 2. **Hero** [linho + textura a 35%]
@@ -98,7 +99,7 @@ Header e rodapé idênticos nas quatro, conferidos com diff. Só muda o `aria-cu
    - "2" consultórios;
    - "2" especialidades com RQE (Otorrinolaringologia e Medicina Aeroespacial);
    - "Adultos e crianças" (Atendimento em todas as idades).
-4. **A Dra. Rosirene** [linho]: a foto invade a faixa em 80px, canto superior direito.
+4. **A Dra. Rosirene** [linho]: a foto invade a faixa em 96px no desktop e 48px no celular, canto superior direito.
    - H2 "Quem vai cuidar de você", dois parágrafos em lorem.
    - Citação: "Gosto de encerrar a consulta só quando a pessoa entendeu tudo. Se precisar, explico de novo."
    - Link "Ler a trajetória completa".
@@ -106,9 +107,10 @@ Header e rodapé idênticos nas quatro, conferidos com diff. Só muda o `aria-cu
    - Intro: "Ouvido, nariz e garganta em todas as idades, e a avaliação de quem trabalha voando."
    - Seis cards de vidro em grid assimétrico:
    ```
-   [H2 + intro (1–5)]            [Adulto (6–9)]   [Infantil (10–12), alto]
-   [Audição (1–4)] [Ronco (5–8), desce 40px]      [Infantil cont.]
-          [Tontura (3–6)]  [Medicina Aeroespacial (7–12), largo]
+   [H2 + intro (1–5)]        [Adulto (6–9)]        [Infantil (10–12), desce 72px]
+   [Audição (1–5)]    [Ronco (6–8), desce 45px]   [Tontura (9–12), desce 72px]
+               [Medicina Aeroespacial (4–12), largo]
+   (Revisado após screenshots: o card alto de Infantil deixava vazio; alturas naturais em cascata.)
    ```
    Frases dos cards:
    - **Adulto:** "Sinusite, rinite, garganta que inflama sempre, rouquidão que não passa."
@@ -127,7 +129,7 @@ Header e rodapé idênticos nas quatro, conferidos com diff. Só muda o `aria-cu
    3. "Plano de cuidado combinado com você": "Decidimos juntos o tratamento, levando em conta a sua rotina."
    4. "Acompanhamento": "Marcamos o retorno, e você sabe como falar com o consultório se algo mudar."
 7. **Consultórios** [sálvia com friso]: H2 "Onde eu atendo".
-   - Dois blocos, Gravataí e Porto Alegre, o segundo 64px mais abaixo. Cada um tem foto, bairro,
+   - Dois blocos, Gravataí e Porto Alegre, o segundo 72px (4rem) mais abaixo. A galeria de vidro invade a seção Aeroespacial em 120px no desktop. Cada um tem foto, bairro,
      endereço e horários [PREENCHER], o botão "Ver no mapa" e um iframe com `src=""`, comentário e
      um painel "Mapa do consultório" por trás.
    - Um bloco de vidro menor com a galeria: "Recepção" e "Sala de exames".
@@ -199,7 +201,7 @@ Todos são desligados com `prefers-reduced-motion: reduce`. Na dúvida, menos.
 |---|---|---|
 | Reveal | cabeçalhos de seção, grupos (cards, passos, números, consultórios, Instagram) | opacity 0→1 + translateY 24px→0, 700ms, `cubic-bezier(.22,1,.36,1)`, uma vez só. Stagger de 80ms entre irmãos. Só vale com a classe `js` no `<html>`. **Não se aplica** ao hero, aos parágrafos soltos, ao FAQ, ao formulário e ao rodapé. |
 | Parallax | textura do hero 0,08 · foto do hero 0,12 · bloco sálvia 0,18 · fundo de Atendimentos 0,15 · foto Aeroespacial 0,10 | rAF + `translate3d`. Só calcula quando a seção está na tela. `will-change` só nesses elementos. Desligado abaixo de 768px. A imagem tem sobra de altura para não abrir fresta. |
-| Vidro | header, painel mobile, cards de Atendimentos, galeria dos consultórios | `rgba(247,243,238,.65)` + `blur(16px) saturate(140%)` + borda `rgba(255,255,255,.5)` + a sombra quente. `@supports not` → fundo sólido com 96% de opacidade. |
+| Vidro | header (ao rolar), painel mobile, cards de Atendimentos, galeria dos consultórios. Cards e galeria usam opacidade 0,86, por terem texto de leitura sobre foto escura | `rgba(247,243,238,.65)` + `blur(16px) saturate(140%)` + borda `rgba(255,255,255,.5)` + a sombra quente. `@supports not` → fundo sólido com 96% de opacidade. |
 | Header | ao rolar | 88px → 68px e borda inferior mais visível, com transição de 250ms. |
 | Scroll suave | links de âncora | CSS `scroll-behavior` + `scroll-margin-top` na altura do header. O JS fecha o painel e move o foco para a seção. |
 | Link ativo | menu da home | IntersectionObserver nas seções, faixa central da tela. |
@@ -209,6 +211,11 @@ Todos são desligados com `prefers-reduced-motion: reduce`. Na dúvida, menos.
 | Zoom | Instagram | scale 1,04 em 600ms no hover. |
 | Menu mobile | painel lateral à direita, min(88vw, 380px) | Esc fecha, foco preso dentro do painel, rolagem da página travada, overlay com leve escurecimento. |
 | Formulário | contato | validação nativa + mensagem inline. A confirmação aparece numa região `aria-live` sem recarregar. |
+
+## 4b. Performance
+
+- `content-visibility: auto` nas seções abaixo da dobra (Atendimentos, Consulta, Dúvidas, Instagram, Contato), com alturas estimadas pela medição real. Ao fim de uma rolagem por âncora, o destino é reajustado.
+- A textura do hero foi recomprimida de 250 KB para 79 KB. A diferença não aparece com 35% de opacidade.
 
 ## 5. Imagens (todas em `assets/img/`, WebP + JPG)
 
