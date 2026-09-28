@@ -8,9 +8,10 @@
   isolation: isolate;
 }
 
+/* Recuo fixo em px: com porcentagem, a textura se moveria quando a troca de fonte muda a altura do hero (CLS). */
 .hero__texture {
   position: absolute;
-  inset: -12% 0;
+  inset: -120px 0;
   z-index: -1;
   background-image: url("../img/textura-fundo.jpg");
   background-image: image-set(url("../img/textura-fundo.webp") type("image/webp"), url("../img/textura-fundo.jpg") type("image/jpeg"));
@@ -552,6 +553,11 @@
   font-size: var(--fs-small);
   color: var(--ink-soft);
   text-align: center;
+}
+
+.office__map:focus-within {
+  outline: 2px solid var(--champagne-ink);
+  outline-offset: 3px;
 }
 
 .office__map iframe {
@@ -1328,4 +1334,30 @@ ol.milestones {
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
   font-weight: 600;
+}
+
+/* Seções abaixo da dobra: o navegador pula layout e pintura até elas chegarem perto da tela.
+   As alturas estimadas vêm da medição real, para as âncoras do menu caírem no lugar certo.
+   .offices e .aero ficam de fora: a galeria de vidro invade a seção seguinte e seria cortada. */
+.services { --cis: 1350px; }
+.visit { --cis: 1000px; }
+.faq { --cis: 850px; }
+.insta { --cis: 560px; }
+.contact { --cis: 1150px; }
+
+.services,
+.visit,
+.faq,
+.insta,
+.contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--cis);
+}
+
+@media (max-width: 767px) {
+  .services { --cis: 2000px; }
+  .visit { --cis: 1270px; }
+  .faq { --cis: 1050px; }
+  .insta { --cis: 620px; }
+  .contact { --cis: 1690px; }
 }

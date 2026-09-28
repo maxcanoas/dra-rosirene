@@ -15,6 +15,7 @@
   --on-dark-soft: #BFCBC6;
   --line: rgba(125, 96, 56, 0.28);
   --line-strong: #C9A97C;
+  --field-border: #8A8074;
 
   /* Vidro */
   --glass-bg: rgba(247, 243, 238, 0.65);
@@ -27,8 +28,8 @@
   --shadow-warm: 0 8px 32px rgba(60, 40, 20, 0.08);
 
   /* Tipografia */
-  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", "Newsreader Fallback", "Newsreader Fallback Times", Georgia, serif;
+  --font-sans: "Source Sans 3", "Source Sans Fallback", "Source Sans Fallback Mac", system-ui, sans-serif;
 
   --fs-small: 0.875rem;
   --fs-body: 1rem;

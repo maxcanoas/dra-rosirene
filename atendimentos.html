@@ -23,7 +23,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Source+Sans+3:wght@400;600&display=swap">
+  <!-- Fontes sem bloquear a renderização. Newsreader em dois cortes estáticos (~23 KB cada):
+       tamanho óptico 72 leve para títulos grandes, 16 regular para títulos pequenos.
+       Em uma URL só, o Google entregaria o arquivo variável de 132 KB. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,300;1,72,300&family=Source+Sans+3:wght@400;600&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@16,400&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,300;1,72,300&family=Source+Sans+3:wght@400;600&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@16,400&display=swap"></noscript>
 
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/base.css">

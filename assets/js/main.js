@@ -124,9 +124,34 @@
     if (!target) return;
     event.preventDefault();
     target.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+    settleOn(target);
     history.pushState(null, '', '#' + id);
     focusWithoutScroll(target);
   });
+
+  // Seções com content-visibility só revelam a altura real quando chegam perto da tela.
+  // No primeiro salto longo o destino pode ficar deslocado; ao fim da rolagem, reajusta.
+  function settleOn(target) {
+    const realign = () => target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    if (!('onscrollend' in window)) {
+      setTimeout(realign, 900);
+      return;
+    }
+    window.addEventListener('scrollend', realign, { once: true });
+    // Se não houve rolagem, o ouvinte não pode ficar esperando a próxima rolagem do usuário.
+    setTimeout(() => window.removeEventListener('scrollend', realign), 2500);
+  }
+
+  // Chegando de outra página com âncora (ex.: index.html#contato).
+  if (location.hash.length > 1) {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target) {
+      window.addEventListener('load', () => {
+        target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        settleOn(target);
+      }, { once: true });
+    }
+  }
 
   /* Link ativo no menu da home */
 

@@ -1,3 +1,51 @@
+/* Fallbacks com largura ajustada à fonte real (medido no Chrome): a troca de fonte não empurra o layout. */
+@font-face {
+  font-family: "Newsreader Fallback";
+  src: local("Georgia");
+  font-weight: 300;
+  size-adjust: 97.3%;
+  ascent-override: 76%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Newsreader Fallback";
+  src: local("Georgia");
+  font-weight: 400;
+  size-adjust: 95.5%;
+  ascent-override: 77%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Newsreader Fallback Times";
+  src: local("Times New Roman");
+  size-adjust: 104.3%;
+  ascent-override: 71%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Source Sans Fallback";
+  src: local("Segoe UI");
+  size-adjust: 93.7%;
+  ascent-override: 109%;
+  descent-override: 43%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Source Sans Fallback Mac";
+  src: local("Helvetica Neue");
+  size-adjust: 92.6%;
+  ascent-override: 110%;
+  descent-override: 43%;
+  line-gap-override: 0%;
+}
+
 *,
 *::before,
 *::after {
@@ -104,17 +152,17 @@ h4 {
   line-height: var(--lh-title);
   color: var(--petrol);
   text-wrap: balance;
-  font-optical-sizing: auto;
 }
 
 h1 {
   font-size: var(--fs-display);
-  font-weight: 350;
+  font-weight: 300;
   letter-spacing: -0.015em;
 }
 
 h2 {
   font-size: var(--fs-h2);
+  font-weight: 300;
   letter-spacing: -0.01em;
 }
 
