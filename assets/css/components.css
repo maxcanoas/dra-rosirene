@@ -781,7 +781,7 @@
 }
 
 .site-footer__nav a,
-.site-footer__social a {
+.site-footer__insta {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
@@ -804,23 +804,20 @@
   min-height: 44px;
 }
 
-@media (min-width: 768px) {
-  .site-footer__grid {
-    grid-template-columns: 1.4fr 1fr 1fr;
-  }
+.site-footer__insta {
+  margin-top: var(--space-2);
+}
 
-  .site-footer__social {
-    grid-column: 2 / -1;
+/* No celular, o botão flutuante não pode cobrir a última linha do rodapé. */
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 88px;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .site-footer__grid {
-    grid-template-columns: 1.5fr 1.2fr 1fr 1fr;
-  }
-
-  .site-footer__social {
-    grid-column: auto;
+    grid-template-columns: 1.5fr 1.2fr 1fr;
   }
 }
 
